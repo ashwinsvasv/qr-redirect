@@ -15,7 +15,23 @@
       page_title: 'QR Redirect',
       page_location: window.location.href
     });
+    
   </script>
+
+  <script>
+  const params = new URLSearchParams(window.location.search);
+
+  const gp = params.get('gp');
+  const village = params.get('village');
+  const hamlet = params.get('hamlet');
+
+  gtag('event', 'qr_scan', {
+    gp: gp,
+    village: village,
+    hamlet: hamlet,
+    page_location: window.location.href
+  });
+</script>
 
   <!-- Redirect -->
   <meta http-equiv="refresh" content="0; url=https://youtu.be/Pmtx3IDo5KI">
