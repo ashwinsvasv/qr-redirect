@@ -8,33 +8,52 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-QWN8TWGZ3Q"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag(){ dataLayer.push(arguments); }
     gtag('js', new Date());
 
     gtag('config', 'G-QWN8TWGZ3Q', {
       page_title: 'QR Redirect',
       page_location: window.location.href
     });
+
+    console.log('[QR] GA4 initialized');
   </script>
 
-  <!-- QR scan tracking -->
   <script>
-    const params = new URLSearchParams(window.location.search);
+    (function () {
+      console.log('[QR] Redirect page loaded');
 
-    const gp = params.get('gp');
-    const village = params.get('village');
-    const hamlet = params.get('hamlet');
+      const params = new URLSearchParams(window.location.search);
 
-    gtag('event', 'qr_scan', {
-      gp: gp,
-      village: village,
-      hamlet: hamlet
-    });
+      const gp = params.get('gp') || '';
+      const village = params.get('village') || '';
+      const hamlet = params.get('hamlet') || '';
 
-    // Redirect AFTER event fires
-    setTimeout(() => {
-      window.location.href = "https://youtu.be/Pmtx3IDo5KI";
-    }, 800);
+      console.log('[QR] Extracted parameters:', {
+        gp: gp,
+        village: village,
+        hamlet: hamlet
+      });
+
+      try {
+        gtag('event', 'qr_scan', {
+          send_to: 'G-QWN8TWGZ3Q',
+          gp: gp,
+          village: village,
+          hamlet: hamlet,
+          transport_type: 'beacon'
+        });
+
+        console.log('[QR] qr_scan event fired');
+      } catch (err) {
+        console.error('[QR] Failed to fire qr_scan event', err);
+      }
+
+      setTimeout(function () {
+        console.log('[QR] Redirecting now…');
+        window.location.href = "https://youtu.be/Pmtx3IDo5KI";
+      }, 800);
+    })();
   </script>
 
 </head>
