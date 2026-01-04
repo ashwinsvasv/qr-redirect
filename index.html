@@ -1,4 +1,25 @@
-<script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Redirecting…</title>
+
+  <!-- Google Analytics GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QWN8TWGZ3Q"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-QWN8TWGZ3Q', {
+      page_title: 'QR Redirect',
+      page_location: window.location.href
+    });
+
+    console.log('[QR] GA4 initialized');
+  </script>
+
+  <script>
     (function () {
       console.log('[QR] Redirect page loaded');
 
@@ -36,3 +57,11 @@
       }, 800);
     })();
   </script>
+
+</head>
+<body>
+  Redirecting…
+</body>
+</html>
+
+is this code correct? what is wrong or needs to be changed? you don't have to open the youtube link
