@@ -1,67 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Redirecting…</title>
+  <meta charset="UTF-8">
+  <title>Redirecting…</title>
 
-  <!-- Google Analytics GA4 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QWN8TWGZ3Q"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
-    gtag('js', new Date());
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QWN8TWGZ3Q"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
 
-    gtag('config', 'G-QWN8TWGZ3Q', {
-      page_title: 'QR Redirect',
-      page_location: window.location.href
-    });
+    gtag('js', new Date());
 
-    console.log('[QR] GA4 initialized');
-  </script>
-
-  <script>
-    (function () {
-      console.log('[QR] Redirect page loaded');
-
-      const params = new URLSearchParams(window.location.search);
-
-      // Default to empty strings if params are missing
-      const gp = params.get('gp') || '';
-      const village = params.get('village') || '';
-      const hamlet = params.get('hamlet') || '';
-
-      console.log('[QR] Extracted parameters:', {
-        gp: gp,
-        village: village,
-        hamlet: hamlet
-      });
-
-      try {
-        gtag('event', 'qr_scan', {
-          'send_to': 'G-QWN8TWGZ3Q', // Optional if only one config exists
-          'gp': gp,
-          'village': village,
-          'hamlet': hamlet,
-          'transport_type': 'beacon',
-          'debug_mode': true // FIXED: Added missing opening quote
-        });
-
-        console.log('[QR] qr_scan event fired');
-      } catch (err) {
-        console.error('[QR] Failed to fire qr_scan event', err);
-      }
-
-      setTimeout(function () {
-        console.log('[QR] Redirecting now…');
-        window.location.href = "https://youtu.be/Pmtx3IDo5KI";
-      }, 800);
-    })();
+    gtag('config', 'G-QWN8TWGZ3Q', {
+      page_title: 'QR Redirect',
+      page_location: window.location.href,
+      debug_mode: true
+    });
   </script>
 
+  <script>
+    const params = new URLSearchParams(window.location.search);
+
+    const gp = params.get('gp');
+    const village = params.get('village');
+    const hamlet = params.get('hamlet');
+
+    const payload = {
+      gp,
+      village,
+      hamlet,
+      userAgent: navigator.userAgent,
+      referrer: document.referrer
+    };
+
+    console.log('[QR] Parameters:', payload);
+
+    /* ---------- GA EVENT ---------- */
+    gtag('event', 'qr_scan', {
+      gp,
+      village,
+      hamlet
+    });
+
+    console.log('[GA] qr_scan event fired');
+
+    /* ---------- GOOGLE SHEETS LOG ---------- */
+    fetch('https://script.google.com/macros/s/AKfycbwRBD_YTAThEBUOYDjwlCWc-gccJrVoTkZNi8cBrMTXFFF821Pl3tdlBHkRn3lQd0yf/exec', {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    })
+    .then(() => console.log('[Sheets] Logged successfully'))
+    .catch(err => console.error('[Sheets] Logging failed', err));
+
+    /* ---------- REDIRECT ---------- */
+    setTimeout(() => {
+      console.log('[Redirect] Moving to content');
+      window.location.href = 'https://youtu.be/Pmtx3IDo5KI';
+    }, 900);
+  </script>
 </head>
 <body>
-  Redirecting…
+  Redirecting…
 </body>
 </html>
-
-is this code correct? what is wrong or needs to be changed? you don't have to open the youtube link
