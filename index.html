@@ -1,30 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Redirecting…</title>
-
-  <!-- Google Analytics GA4 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QWN8TWGZ3Q"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
-    gtag('js', new Date());
-
-    gtag('config', 'G-QWN8TWGZ3Q', {
-      page_title: 'QR Redirect',
-      page_location: window.location.href
-    });
-
-    console.log('[QR] GA4 initialized');
-  </script>
-
-  <script>
+<script>
     (function () {
       console.log('[QR] Redirect page loaded');
 
       const params = new URLSearchParams(window.location.search);
 
+      // Default to empty strings if params are missing
       const gp = params.get('gp') || '';
       const village = params.get('village') || '';
       const hamlet = params.get('hamlet') || '';
@@ -37,12 +17,12 @@
 
       try {
         gtag('event', 'qr_scan', {
-          send_to: 'G-QWN8TWGZ3Q',
-          gp: gp,
-          village: village,
-          hamlet: hamlet,
-          transport_type: 'beacon',
-          debug_mode':true
+          'send_to': 'G-QWN8TWGZ3Q', // Optional if only one config exists
+          'gp': gp,
+          'village': village,
+          'hamlet': hamlet,
+          'transport_type': 'beacon',
+          'debug_mode': true // FIXED: Added missing opening quote
         });
 
         console.log('[QR] qr_scan event fired');
@@ -56,9 +36,3 @@
       }, 800);
     })();
   </script>
-
-</head>
-<body>
-  Redirecting…
-</body>
-</html>
